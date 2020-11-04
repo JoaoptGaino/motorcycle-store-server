@@ -1,6 +1,6 @@
 import express from 'express';
-import MotorcyclesController from './Controllers/MotorcyclesController';
-const motorcycleController = new MotorcyclesController();
+import VehiculesController from './Controllers/VehiculesController';
+const vehiculesController = new VehiculesController();
 const routes = express.Router();
 
 routes.get('/', (req, res) => {
@@ -9,8 +9,12 @@ routes.get('/', (req, res) => {
     });
 });
 
-routes.get('/motorcycles', motorcycleController.index);
-routes.post('/motorcycles', motorcycleController.create);
+routes.get('/vehicules/motorcycles', vehiculesController.indexMotos);//Show all motorcycles
+routes.get('/vehicules/cars', vehiculesController.indexCars);//Show all cars
+routes.get('/vehicules', vehiculesController.index);//Show all vehicules
+
+
+routes.post('/vehicules', vehiculesController.create);//Create a new vehicule
 
 
 export default routes;
