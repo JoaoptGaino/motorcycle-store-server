@@ -46,4 +46,12 @@ export default class VehiculesController {
             });
         }
     }
+    async delete(req: Request, res: Response) {
+        const id = req.params;
+        await db('veiculos').where('id', '=', id).delete();
+
+        res.status(201).json({
+            deleted: id
+        });
+    }
 }

@@ -15,6 +15,7 @@ routes.get('/vehicules', vehiculesController.index);//Show all vehicules
 
 
 routes.post('/vehicules', vehiculesController.create);//Create a new vehicule
+routes.delete('/vehicules/:id', vehiculesController.delete);
 
 
 export default routes;
