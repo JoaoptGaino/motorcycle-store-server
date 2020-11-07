@@ -33,10 +33,13 @@ export default class VehiculesController {
             estilo,
             tipo
         } = req.body;
-        const vehicule = { modelo, marca, ano, combustivel, motor, preco, descricao, opcionais, estilo, tipo };
+        const vehicule = { image: req.file.filename, modelo, marca, ano, combustivel, motor, preco, descricao, opcionais, estilo, tipo };
+        console.log("AQUI");
         const trx = await db.transaction();
+        console.log("AQUI2");
         try {
             await trx('veiculos').insert(vehicule);
+            console.log("AQUI3");
             await trx.commit();
             return res.status(201).send();
         } catch (err) {
