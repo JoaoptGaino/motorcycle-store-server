@@ -12,11 +12,10 @@ routes.get('/', (req, res) => {
     });
 });
 
+//----------------------------------------Vehicules-----------------------------------------
 routes.get('/vehicules/motorcycles', vehiculesController.indexMotos);//Show all motorcycles
 routes.get('/vehicules/cars', vehiculesController.indexCars);//Show all cars
 routes.get('/vehicules', vehiculesController.index);//Show all vehicules
-
-
 routes.post('/vehicules',
     upload.single('image'),
     celebrate({
@@ -36,7 +35,10 @@ routes.post('/vehicules',
         abortEarly: false
     }),
     vehiculesController.create);//Create a new vehicule
-routes.delete('/vehicules/:id', vehiculesController.delete);
 
+routes.put('/vehicules/:id', vehiculesController.update);
+
+routes.delete('/vehicules/:id', vehiculesController.delete);//Delete
+//-------------------------------------------------------------------------------------------
 
 export default routes;
