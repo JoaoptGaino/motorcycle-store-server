@@ -4,7 +4,7 @@ import db from '../Database/connection';
 
 export default class VehiculesController {
     async index(req: Request, res: Response) {
-        const vehicules = await db('veiculos').select('*');
+        const vehicules = await db('vehicules').select('*');
         const serializedVehicules = vehicules.map(vehicule => {
             return {
                 id: vehicule.id,
@@ -18,13 +18,14 @@ export default class VehiculesController {
                 opcionais: vehicule.opcionais,
                 estilo: vehicule.estilo,
                 tipo: vehicule.tipo,
-                image_url: `http://localhost:3333/uploads/${vehicule.image}`
+                image_url: `http://localhost:3333/uploads/${vehicule.image}`,
+                user_id: vehicule.user_id
             }
         });
         return res.json(serializedVehicules);
     }
     async indexMotos(req: Request, res: Response) {
-        const motorcycles = await db('veiculos')
+        const motorcycles = await db('vehicules')
             .where('tipo', '=', 'Motocicleta')
             .select('*');
         const serializedBikes = motorcycles.map(motorcycle => {
@@ -46,7 +47,7 @@ export default class VehiculesController {
         return res.json(serializedBikes);
     }
     async indexCars(req: Request, res: Response) {
-        const cars = await db('veiculos')
+        const cars = await db('vehicules')
             .where('tipo', '=', 'Carro')
             .select('*');
         const serializedCars = cars.map(car => {
@@ -78,18 +79,20 @@ export default class VehiculesController {
             descricao,
             opcionais,
             estilo,
-            tipo
+            tipo,
+            user_id
         } = req.body;
-        const vehicule = { image: req.file.filename, modelo, marca, ano, combustivel, motor, preco, descricao, opcionais, estilo, tipo };
+        const vehicule = { image_url: req.file.filename, modelo, marca, ano, combustivel, motor, preco, descricao, opcionais, estilo, tipo, user_id };
         const trx = await db.transaction();
         try {
-            await trx('veiculos').insert(vehicule);
+            await trx('vehicules').insert(vehicule);
             await trx.commit();
             return res.status(201).send();
         } catch (err) {
             await trx.rollback();
             return res.status(400).json({
-                error: "Unable to create new vehicule"
+                error: "Unable to create new vehicule",
+                err
             });
         }
     }
@@ -97,15 +100,15 @@ export default class VehiculesController {
         const id = req.params;
         const { modelo, preco } = req.body;
         const vehicule = { modelo, preco }
-        await db('veiculos').where('id', '=', id).update(vehicule);
+        await db('vehicules').where('id', '=', id).update(vehicule);
 
         return res.status(200).json({
-            updated: modelo
+            updated: { modelo, preco }
         })
     }
     async delete(req: Request, res: Response) {
         const id = req.params;
-        await db('veiculos').where('id', '=', id).delete();
+        await db('vehicules').where('id', '=', id).delete();
 
         res.status(201).json({
             deleted: id

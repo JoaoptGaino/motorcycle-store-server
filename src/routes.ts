@@ -1,7 +1,9 @@
 import express from 'express';
 import multer from 'multer'
 import VehiculesController from './Controllers/VehiculesController';
+import UsersController from './Controllers/UsersController';
 const vehiculesController = new VehiculesController();
+const usersController = new UsersController();
 import multerConfig from './config/multer';
 import { celebrate, Joi } from 'celebrate';
 const routes = express.Router();
@@ -11,6 +13,10 @@ routes.get('/', (req, res) => {
         message: "Hello world!",
     });
 });
+
+
+routes.get('/users', usersController.index);
+routes.post('/users', usersController.create);
 
 //----------------------------------------Vehicules-----------------------------------------
 routes.get('/vehicules/motorcycles', vehiculesController.indexMotos);//Show all motorcycles
@@ -29,7 +35,8 @@ routes.post('/vehicules',
             descricao: Joi.string().required(),
             opcionais: Joi.string().required(),
             estilo: Joi.string().required(),
-            tipo: Joi.string().required()
+            tipo: Joi.string().required(),
+            user_id: Joi.string().required()
         })
     }, {
         abortEarly: false
