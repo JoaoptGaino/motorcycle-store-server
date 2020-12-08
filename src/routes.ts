@@ -17,10 +17,10 @@ routes.get('/', (req, res) => {
 
 routes.get('/users', usersController.index);
 routes.post('/users', usersController.create);
+routes.post('/users/auth', usersController.auth);
 
 //----------------------------------------Vehicules-----------------------------------------
-routes.get('/vehicules/motorcycles', vehiculesController.indexMotos);//Show all motorcycles
-routes.get('/vehicules/cars', vehiculesController.indexCars);//Show all cars
+routes.get('/vehicules/type',vehiculesController.indexTipo);
 routes.get('/vehicules', vehiculesController.index);//Show all vehicules
 routes.post('/vehicules',
     upload.single('image'),

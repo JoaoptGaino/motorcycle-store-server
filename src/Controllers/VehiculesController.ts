@@ -18,56 +18,38 @@ export default class VehiculesController {
                 opcionais: vehicule.opcionais,
                 estilo: vehicule.estilo,
                 tipo: vehicule.tipo,
-                image_url: `http://localhost:3333/uploads/${vehicule.image}`,
+                image_url: `http://192.168.215.193:3333/uploads/${vehicule.image_url}`,
                 user_id: vehicule.user_id
             }
         });
         return res.json(serializedVehicules);
     }
-    async indexMotos(req: Request, res: Response) {
-        const motorcycles = await db('vehicules')
-            .where('tipo', '=', 'Motocicleta')
-            .select('*');
-        const serializedBikes = motorcycles.map(motorcycle => {
+
+    async indexTipo(req: Request, res: Response) {
+        const filter = req.query;
+        const tipo = filter.tipo as string;
+        const vehicules = await db('vehicules').select('*').where('tipo', '=', tipo);
+        const serializedVehicules = vehicules.map(vehicule => {
             return {
-                id: motorcycle.id,
-                modelo: motorcycle.modelo,
-                marca: motorcycle.marca,
-                ano: motorcycle.ano,
-                combustivel: motorcycle.combustivel,
-                motor: motorcycle.motor,
-                preco: motorcycle.preco,
-                descricao: motorcycle.descricao,
-                opcionais: motorcycle.opcionais,
-                estilo: motorcycle.estilo,
-                tipo: motorcycle.tipo,
-                image_url: `http://localhost:3333/uploads/${motorcycle.image}`
+                id: vehicule.id,
+                modelo: vehicule.modelo,
+                marca: vehicule.marca,
+                ano: vehicule.ano,
+                combustivel: vehicule.combustivel,
+                motor: vehicule.motor,
+                preco: vehicule.preco,
+                descricao: vehicule.descricao,
+                opcionais: vehicule.opcionais,
+                estilo: vehicule.estilo,
+                tipo: vehicule.tipo,
+                image_url: `http://192.168.215.193:3333/uploads/${vehicule.image}`,
+                user_id: vehicule.user_id
             }
         });
-        return res.json(serializedBikes);
+        return res.json(serializedVehicules);
+
     }
-    async indexCars(req: Request, res: Response) {
-        const cars = await db('vehicules')
-            .where('tipo', '=', 'Carro')
-            .select('*');
-        const serializedCars = cars.map(car => {
-            return {
-                id: car.id,
-                modelo: car.modelo,
-                marca: car.marca,
-                ano: car.ano,
-                combustivel: car.combustivel,
-                motor: car.motor,
-                preco: car.preco,
-                descricao: car.descricao,
-                opcionais: car.opcionais,
-                estilo: car.estilo,
-                tipo: car.tipo,
-                image_url: `http://localhost:3333/uploads/${car.image}`
-            }
-        });
-        return res.json(serializedCars);
-    }
+
     async create(req: Request, res: Response) {
         const {
             modelo,
